@@ -1,0 +1,112 @@
+use <parametric_involute_gear_v5.0.scad>
+
+//Kepler 10 
+
+planet_sizes = [1.416, 2, 2.227];
+planet_periods= [0.837495,1.5, 3.29485];
+planet_distances = [ 0.0584,0.1, 0.2407];
+
+//planet_sizes = [0.119, 0.089, 0.32, 0.24];//, 0.26, 0.74, 1.03] ;
+//planet_periods= [7.0082, 8.719, 59.736, 91.9391];//, 124.91, 210, 331] ;
+//planet_distances = [0.074, 0.089, 0.32, 0.42];//, 0.48, 0.71, 1.01] ;
+
+size_scale = 20;
+length_scale = 2000;
+
+shaft_seperation = 200;
+vertical_gear_speration = 20;
+
+ms_base_radius = 90;
+ms_radius_inc  = 10;
+ms_key_width   = 5;
+ms_key_length  = 10;
+ms_bore 		 = 30;
+//Gears 
+
+base_gear_no  = 27;
+
+orrery_shaft_height= 300;
+
+//planet shaft
+ps_base_radius = 20;
+ps_radius_inc  = 7;
+ps_thickness   = 4;
+
+
+function main_gears_bore_diameter(no,base_radius,radius_inc) = base_radius-(radius_inc*no);
+function pair_pitch(base_gear_no, ratio, sep) = (1+ ratio)*base_gear_no/(2.0*sep);
+function ps_cylinder_r(order_no) = (ps_base_radius+ (order_no)*ps_radius_inc);
+
+module main_shaft_gears(planet_periods){
+
+	no_planets = len(planet_periods);
+	for(i = [0:1:no_planets-1]){
+		translate([0,0,i*vertical_gear_speration]){
+
+			gear(number_of_teeth = base_gear_no,
+				diametral_pitch  = pair_pitch(base_gear_no, planet_periods[i]/planet_periods[1],shaft_seperation ),
+				bore_diameter    = ms_bore,
+		          gear_thickness   = vertical_gear_speration,
+				rim_thickness = vertical_gear_speration,
+				hub_thickness = vertical_gear_speration);
+		}	
+
+	}
+}
+
+module planet_arm(radius=40, thickness=5, length=100, height=100, planet_size=20){
+	difference(){
+		cylinder(r=radius+thickness, h=20);
+		cylinder(r=radius, h=20);
+	}
+	translate([radius+ps_thickness-2,-10,0]){
+		cube([length,20,20]);
+		translate([length,0,0]){
+			cube([20,20,height]);
+			translate([10,10,height-10]){
+				sphere(r=planet_size);
+			}
+		}
+	}
+	
+	
+}
+
+
+
+
+module star(radius= 10, hole=10){
+	difference(){
+		sphere(r=radius);
+		translate([0,0,-radius]){
+			cylinder(h=radius, r=hole);
+		}
+	}
+}
+
+module spindle(height=100, base_radius=30, thickness=3){
+	cylinder(center=false, r=thickness, h=height);
+	cylinder(center=false,r=base_radius, h=20);
+}
+
+module planet_shaft(order_no, ratio, seperation, thickness){
+	
+	height = orrery_shaft_height/len(planet_sizes);
+	echo("planet shaft width", order_no, ps_cylinder_r(order_no));
+
+	difference(){
+		union(){
+			cylinder(h=orrery_shaft_height -(height*(order_no)), r =  ps_cylinder_r(order_no));
+			gear(number_of_teeth = base_gear_no*ratio,
+				diametral_pitch  = pair_pitch(base_gear_no, ratio,shaft_seperation ),
+				bore_diameter    =  ps_cylinder_r(order_no)*2,
+			    gear_thickness   = vertical_gear_speration,
+				rim_thickness = vertical_gear_speration,
+				hub_thickness = vertical_gear_speration);
+		}
+		echo("inner diameter", ps_cylinder_r(order_no), thickness);
+		cylinder(h=height+ 400, r = ps_cylinder_r(order_no)-thickness);
+	}
+}
+
+

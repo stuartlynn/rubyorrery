@@ -1,0 +1,26 @@
+// TABLE 
+
+difference(){
+	union(){
+	
+		cube([<%=@table_width%>, <%=@table_length%>, 10]);
+		
+		translate([0, 0 , -<%=@table_leg_height%> ])
+			cube([10,10,<%=@table_leg_height%>]);
+	
+		translate([<%=@table_width%> -10 , 0, -<%=@table_leg_height%>] )
+			cube([10,10,<%=@table_leg_height%>]);
+	
+		translate([0, <%=@table_length%> -10, -<%=@table_leg_height%>])
+			cube([10,10,<%=@table_leg_height%>]);
+	
+		translate([<%=@table_width%> -10, <%=@table_length%> -10, - <%=@table_leg_height%>])
+			cube([10,10,<%=@table_leg_height%>]);
+	
+		translate([ <%= @table_width/2.0 - @shaft_seperation/2.0%> , <%=@table_length/2.0%>,10])
+			cylinder(r=<%=ps_cylinder_r(0)-@ps_thickness-3%>, h=100);
+		
+	}
+	translate([ <%= @table_width/2.0 + @shaft_seperation/2.0%> , <%=@table_length/2.0%>, -20])
+		cylinder(r=<%=@ms_bore/2.0 + 4%>, h=40);
+}

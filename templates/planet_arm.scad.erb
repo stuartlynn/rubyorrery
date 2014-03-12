@@ -1,0 +1,27 @@
+
+
+<%
+	
+    radius = ps_cylinder_r(options[:index])+2.5;
+	length = options[:planet][:distance]*@length_scale;
+	height = (options[:index]+1)*60;
+	size   = options[:planet][:size]*@size_scale;
+	thickness = 5;
+%> 
+
+
+difference(){
+	cylinder(r=<%=radius%>+<%=thickness%>, h=20);
+	cylinder(r=<%=radius%>, h=20);
+}
+translate([<%=radius%>+<%=@ps_thickness%>-2,-10,0]){
+	cube([<%=length%>,20,20]);
+	translate([<%=length%>,0,0]){
+		cube([20,20,<%=height%>]);
+		translate([10,10,<%=height%>-10]){
+			sphere(r=<%=size%>);
+		}
+	}
+}
+
+

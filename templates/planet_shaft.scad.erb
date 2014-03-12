@@ -1,0 +1,15 @@
+
+	
+difference(){
+	union(){
+		cylinder(h=<%=ith_planet_shaft_height(options[:index])%>, r =  <%=ps_cylinder_r(options[:index])%>);
+		gear(number_of_teeth =  <%= @base_gear_no * options[:ratio]%>,
+			diametral_pitch  =  <%=pair_pitch(options[:ratio])%>,
+			bore_diameter    =  <%=ps_cylinder_r(options[:index])*2%>,
+			gear_thickness   =  <%=@vertical_gear_speration%>,
+			rim_thickness 	 =  <%=@vertical_gear_speration%>,
+			hub_thickness 	 =  <%=@vertical_gear_speration%>);
+	}
+	cylinder(h=<%=ith_planet_shaft_height(options[:index]) + 400%>, r = <%=ps_cylinder_r(options[:index])-@ps_thickness%>);
+}
+
