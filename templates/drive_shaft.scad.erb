@@ -1,16 +1,26 @@
 //Drive Shaft
+
+
+
+difference(){
+union(){
+
+cylinder(r=<%=@shaft_seperation*0.7%>, h= <%=@vertical_gear_speration%>);
+
 <% @planets.each_with_index do |planet, index| %>
-translate([0,0,<%=index%> * <%=@vertical_gear_speration%>]){
+translate([0,0,<%=index+1%> * <%=@vertical_gear_speration%>]){
 
 	gear(number_of_teeth = <%=@base_gear_no%>,
-		diametral_pitch  = <%=pair_pitch( planet[:period]/@planets[1][:period]) %>,
-		bore_diameter    = <%=@ms_bore%>,
+		diametral_pitch  = <%=pair_pitch( planet[:period]/@planets[@base_planet_no][:period]) %>,
+		bore_diameter    = <%=@ms_bore + 2 %>,
 		gear_thickness   = <%=@vertical_gear_speration%>,
 		rim_thickness = <%=@vertical_gear_speration%>,
 		hub_thickness = <%=@vertical_gear_speration%>);
 }
 <%end%>	
-translate([0,0,-<%=@planets.length*@vertical_gear_speration  %>]){
+}
+translate([0,0,0]){
 	cylinder(r=<%=@ms_bore/2.0%>, h = <%=@planets.length*@vertical_gear_speration *2 %>);
+}
 }
 

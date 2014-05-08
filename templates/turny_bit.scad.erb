@@ -1,0 +1,15 @@
+<% pp =  pair_pitch(@planets[0][:period]/@planets[@base_planet_no][:period] ) %>
+
+gear(number_of_teeth =  <%= @base_gear_no * drive_ratio(pp, @drive_shaft_seperation, @base_gear_no) %>,
+      diametral_pitch  =  <%=pp%>,
+      bore_diameter    =  <%=@ms_bore%>,
+      gear_thickness   =  <%=@vertical_gear_speration%>,
+      rim_thickness    =  <%=@vertical_gear_speration%>,
+      hub_thickness    =  <%=@vertical_gear_speration%>);
+
+
+translate([0,0,<%=@vertical_gear_speration%>])
+  difference(){
+    cylinder(r= 100, h= <%=@vertical_gear_speration%> );
+    cylinder(r=<%=@ms_bore/2.0%> , h = <%=@vertical_gear_speration*2%>);
+  }

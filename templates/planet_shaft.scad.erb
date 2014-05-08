@@ -1,6 +1,7 @@
 
 	
 difference(){
+difference(){
 	union(){
 		cylinder(h=<%=ith_planet_shaft_height(options[:index])%>, r =  <%=ps_cylinder_r(options[:index])%>);
 		gear(number_of_teeth =  <%= @base_gear_no * options[:ratio]%>,
@@ -9,7 +10,13 @@ difference(){
 			gear_thickness   =  <%=@vertical_gear_speration%>,
 			rim_thickness 	 =  <%=@vertical_gear_speration%>,
 			hub_thickness 	 =  <%=@vertical_gear_speration%>);
+
+		
 	}
 	cylinder(h=<%=ith_planet_shaft_height(options[:index]) + 400%>, r = <%=ps_cylinder_r(options[:index])-@ps_thickness%>);
-}
+}	
 
+translate([<%=ps_cylinder_r(options[:index]) - @ps_thickness-2%>,0,<%=ith_planet_shaft_height(options[:index]) - (planet_shaft_height - 30) %> ])
+			cube([  <%=@ps_thickness%> + 10, 5, <%= planet_shaft_height - 30 %>]);
+
+}

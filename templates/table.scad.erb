@@ -1,26 +1,16 @@
-// TABLE 
+//Table 	
+	
+scale([1, <%=@table_length/@table_width.to_f%>, 1])
+  cylinder(r=<%=@table_width%>, h = <%=@table_height %>);
 
-difference(){
-	union(){
-	
-		cube([<%=@table_width%>, <%=@table_length%>, 10]);
-		
-		translate([0, 0 , -<%=@table_leg_height%> ])
-			cube([10,10,<%=@table_leg_height%>]);
-	
-		translate([<%=@table_width%> -10 , 0, -<%=@table_leg_height%>] )
-			cube([10,10,<%=@table_leg_height%>]);
-	
-		translate([0, <%=@table_length%> -10, -<%=@table_leg_height%>])
-			cube([10,10,<%=@table_leg_height%>]);
-	
-		translate([<%=@table_width%> -10, <%=@table_length%> -10, - <%=@table_leg_height%>])
-			cube([10,10,<%=@table_leg_height%>]);
-	
-		translate([ <%= @table_width/2.0 - @shaft_seperation/2.0%> , <%=@table_length/2.0%>,10])
-			cylinder(r=<%=ps_cylinder_r(0)-@ps_thickness-3%>, h=100);
-		
-	}
-	translate([ <%= @table_width/2.0 + @shaft_seperation/2.0%> , <%=@table_length/2.0%>, -20])
-		cylinder(r=<%=@ms_bore/2.0 + 4%>, h=40);
+translate([<%= - @shaft_seperation/2.0%>, 0, 0]){
+  translate([0 , 0 , 0])
+    snap_shaft(r1=<%=ps_cylinder_r(0)-@ps_thickness-3%>, h=<%=@orrery_shaft_height*1.3%>, overhang=3); 
+
+  translate([ <%= @shaft_seperation + @ms_bore/2.0 - 6 %> ,0, 0])
+    snap_shaft(h=<%=(@planets.length+1)*@vertical_gear_speration + @table_height + 10 %>, r1=<%=@ms_bore/2.0 -2%>, overhang=3);
+
+  //New Part 
+  translate([0 , 0 , 0])
+    cylinder(r=<%= ps_cylinder_r(0) - @ps_thickness%> + 4, h= <%= @vertical_gear_speration + @table_height + 1%>);
 }
